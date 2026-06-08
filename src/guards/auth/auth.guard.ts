@@ -29,8 +29,8 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromCookie(request: Request): string | undefined {
     // 💡 This is where we extract the token from the cookie
     // The name of the cookie should match the name used when setting the cookie in the login route
-    if(request.cookies && request.cookies['token']) {
-      return request.cookies['token'];
+    if(request.cookies && request.cookies['access_token']) {
+      return request.cookies['access_token'];
     }
     
     return undefined;

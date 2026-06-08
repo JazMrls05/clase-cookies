@@ -13,7 +13,7 @@ export class AuthenticationController {
   @Res({passthrough: true}) res: Response) {
     const resultado = await this.authenticationService.register(createUserDto);
     this.setTokenCookie(res, resultado.access_token);
-    return { message: 'usuario registrado exitosamente', token: resultado.access_token };
+    return { message: 'usuario registrado exitosamente' };
   }
 
   @Post('login')
@@ -38,7 +38,7 @@ export class AuthenticationController {
       httpOnly: true, 
       sameSite: 'strict',
       secure: true, 
-      maxAge: 1000 * 60, // Sincronizacion de 60s con la exp del JWT token
+      maxAge: 1000 * 60 * 2, // Sincronizacion de 60s con la exp del JWT token
     });
   }
 
