@@ -8,7 +8,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     ConfigModule.forRoot(),
     AuthenticationModule,
     MongooseModule.forRoot(process.env.MONGO_URL!),
-    
   ],
   controllers: [],
   providers: [],

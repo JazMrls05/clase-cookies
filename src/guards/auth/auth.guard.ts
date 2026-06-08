@@ -1,15 +1,15 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   
- constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromCookie(request);
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -26,9 +26,19 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: any): string | undefined {
-    console.log('Authorization Header:', request.headers.authorization);
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private extractTokenFromCookie(request: Request): string | undefined {
+    // 💡 This is where we extract the token from the cookie
+    // The name of the cookie should match the name used when setting the cookie in the login route
+    if(request.cookies && request.cookies['token']) {
+      return request.cookies['token'];
+    }
+    
+    return undefined;
   }
+
+  // private extractTokenFromHeader(request: any): string | undefined {
+  //   console.log('Authorization Header:', request.headers.authorization);
+  //   const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  //   return type === 'Bearer' ? token : undefined;
+  // }
 }
