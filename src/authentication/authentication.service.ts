@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthenticationService {
     constructor(@InjectModel(Usuario.name) private readonly usuarioModel: Model<Usuario>,
-                private readonly jwtService: JwtService) {}
+    private readonly jwtService: JwtService) {}
 
     async register(createUserDto: CreateUserDto) {
 
@@ -31,7 +31,7 @@ export class AuthenticationService {
 
     }
 
-   async login(loginUser: {email: string, password: string}) {
+  async login(loginUser: {email: string, password: string}) {
     const usuario = await this.usuarioModel.findOne({ email: loginUser.email });
 
 
@@ -48,10 +48,10 @@ export class AuthenticationService {
     return {
       access_token: await this.jwtService.signAsync(payload)
     };
-   }
+  }
 
 
-   async getProfile(userId: string) {
+  async getProfile(userId: string) {
     return await this.usuarioModel.findById(userId).select('-password');
-   }
+  }
 }

@@ -7,9 +7,10 @@ export class AuthGuard implements CanActivate {
   
   constructor(private readonly jwtService: JwtService) {}
 
+  // Execution context: información de la instancia de la llamada.
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromCookie(request);
+    const request = context.switchToHttp().getRequest(); //Cambiamos el contexto de la llamada a HTTP
+    const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -26,19 +27,21 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromCookie(request: Request): string | undefined {
-    // 💡 This is where we extract the token from the cookie
-    // The name of the cookie should match the name used when setting the cookie in the login route
-    if(request.cookies && request.cookies['access_token']) {
-      return request.cookies['access_token'];
-    }
-    
-    return undefined;
+  private extractTokenFromHeader(request: any): string | undefined {
+    console.log('Authorization Header:', request.headers.authorization);
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
-
-  // private extractTokenFromHeader(request: any): string | undefined {
-  //   console.log('Authorization Header:', request.headers.authorization);
-  //   const [type, token] = request.headers.authorization?.split(' ') ?? [];
-  //   return type === 'Bearer' ? token : undefined;
+  
+  // private extractTokenFromCookie(request: Request): string | undefined {
+  //   // 💡 This is where we extract the token from the cookie
+  //   // The name of the cookie should match the name used when setting the cookie in the login route
+  //   if(request.cookies && request.cookies['access_token']) {
+  //     return request.cookies['access_token'];
+  //   }
+    
+  //   return undefined;
   // }
+
+
 }

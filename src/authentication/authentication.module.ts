@@ -7,10 +7,10 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-      JwtModule.register({
+      JwtModule.register({ // Acá se configura el Header del JWT.
       global: true,
-      secret: "MiSuperClaveSecreta2026VamosPorLa4ta",
-      signOptions: { expiresIn: '2m' },
+      secret: "MiSuperClaveSecreta2026VamosPorLa4ta",// En un entorno de producción, esta clave debe ser almacenada de manera segura. 32 Caracteres MINIMO 
+      signOptions: { expiresIn: '30s' }, // 2m, 4h, por ejemplo
     }),
     MongooseModule.forFeature([{ name: Usuario.name, schema: usuarioSchema }])
   ],
